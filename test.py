@@ -1,1 +1,1 @@
-echo "Esto no es python"
+print("Esto es python")
