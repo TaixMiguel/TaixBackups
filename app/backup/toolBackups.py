@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from backupLocal import LocalBackup
+from backupMega import MegaBackup
 from datetime import datetime
 import errno
 import shutil
@@ -10,6 +11,8 @@ import os
 def get_instance_backup(backup_code: str, source_dir: str, destination_dir: str, filename_backup: str = "backup"):
     if backup_code in ('local', 'LOCAL'):
         return LocalBackup(source_dir=source_dir, destination_dir=destination_dir, filename_backup=filename_backup)
+    if backup_code in ('mega', 'MEGA'):
+        return MegaBackup(source_dir=source_dir, destination_dir=destination_dir, filename_backup=filename_backup)
 
     # TODO: añadir línea al log
     print(f"No se ha encontrado instancia con el código '{backup_code}'")
@@ -31,4 +34,6 @@ def create_backup(source_dir: str, destination_dir: str, filename_backup: str = 
     archive_from = os.path.dirname(source_dir)
     archive_to = os.path.basename(source_dir.strip(os.sep))
     shutil.make_archive(filename_backup, format_backup, archive_from, archive_to)
+    # TODO: añadir línea al log
+    print("Backup creado con el nombre {}".format('%s.%s' % (filename_backup, format_backup)))
     return '%s.%s' % (filename_backup, format_backup)

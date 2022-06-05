@@ -16,11 +16,12 @@ class Backup(ABC):
         try:
             filename: str = toolBackups.create_backup(source_dir=self.source_dir, destination_dir=self.destination_dir,
                                                       filename_backup=self.filename_backup, date_format=date_format)
+
+            # TODO: añadir línea al log
+            print(f"Se procede a la subida del backup {filename} al servidor escogido")
+            self.upload_backup(filename_upload=filename)
         except FileNotFoundError:
             return False
-
-        # Mover el archivo a donde toca
-        self.upload_backup(filename_upload=filename)
         return True
 
     @abstractmethod
@@ -31,14 +32,17 @@ class Backup(ABC):
 if __name__ == '__main__':
     source: str = ''
     destination: str = ''
+    backup_type: str = 'LOCAL'
     argumentList = sys.argv[1:]
-    options = "s:d:"
-    long_options = ["source=", "destination="]
+    options = "t:s:d:"
+    long_options = ["type=", "source=", "destination="]
 
     try:
         arguments, values = getopt.getopt(argumentList, options, long_options)
 
         for currentArgument, currentValue in arguments:
+            if currentArgument in ("-t", "--type"):
+                backup_type = currentValue
             if currentArgument in ("-s", "--source"):
                 source = currentValue
             elif currentArgument in ("-d", "--destination"):
@@ -51,5 +55,5 @@ if __name__ == '__main__':
     if not destination:
         destination = input("Directorio donde guardar la copia: ")
 
-    backup = toolBackups.get_instance_backup('LOCAL', source_dir=source, destination_dir=destination)
+    backup = toolBackups.get_instance_backup(backup_type, source_dir=source, destination_dir=destination)
     backup.create_backup()
