@@ -8,7 +8,7 @@ Proyecto web para generar backups y almacenarlos en local o en la nube ([Mega](h
   - [ ] Generar backups desde la aplicación web
 - [ ] Programar el backup para ejecución diaria o por un cron
 - [ ] Almacenamiento del backup
-  - [ ] En local
+  - [x] En local
   - [ ] En la nube de [Mega](https://mega.io/)
 - [ ] Montar sensores MQTT para informar de los backups
   - [ ] Informar del último backup realizado (fecha-hora, nombre del backup y estado)
