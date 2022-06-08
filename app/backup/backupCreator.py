@@ -2,11 +2,11 @@
 
 from abc import ABC, abstractmethod
 import getopt
-import toolBackups
+import toolBackupCreator
 import sys
 
 
-class Backup(ABC):
+class BackupCreator(ABC):
     def __init__(self, source_dir: str, destination_dir: str, filename_backup: str):
         self.source_dir = source_dir
         self.destination_dir = destination_dir
@@ -14,8 +14,10 @@ class Backup(ABC):
 
     def create_backup(self, date_format: str = "%Y%m%d_%H%M%S") -> bool:
         try:
-            filename: str = toolBackups.create_backup(source_dir=self.source_dir, destination_dir=self.destination_dir,
-                                                      filename_backup=self.filename_backup, date_format=date_format)
+            filename: str = toolBackupCreator.create_backup(source_dir=self.source_dir,
+                                                            destination_dir=self.destination_dir,
+                                                            filename_backup=self.filename_backup,
+                                                            date_format=date_format)
 
             # TODO: añadir línea al log
             print(f"Se procede a la subida del backup {filename} al servidor escogido")
@@ -55,5 +57,5 @@ if __name__ == '__main__':
     if not destination:
         destination = input("Directorio donde guardar la copia: ")
 
-    backup = toolBackups.get_instance_backup(backup_type, source_dir=source, destination_dir=destination)
+    backup = toolBackupCreator.get_instance_backup(backup_type, source_dir=source, destination_dir=destination)
     backup.create_backup()

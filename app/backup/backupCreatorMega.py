@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-from backup import Backup
+from backupCreator import BackupCreator
 import errno
 from mega import Mega
 from os import remove
 import os
 
 
-class MegaBackup(Backup):
+class MegaBackupCreator(BackupCreator):
     def __init__(self, source_dir: str, destination_dir: str, filename_backup: str):
         super().__init__(source_dir=source_dir, destination_dir=destination_dir, filename_backup=filename_backup)
 
