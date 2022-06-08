@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-from backup import Backup
+from backupCreator import BackupCreator
 import os
 import shutil
 
 
-class LocalBackup(Backup):
+class LocalBackupCreator(BackupCreator):
     def __init__(self, source_dir: str, destination_dir: str, filename_backup: str):
         super().__init__(source_dir=source_dir, destination_dir=destination_dir, filename_backup=filename_backup)
 
