@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from backupCreator import BackupCreator
+from .backupCreator import BackupCreator
 import os
 import shutil
 

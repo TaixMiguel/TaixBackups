@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from backupCreatorLocal import LocalBackupCreator
-from backupCreatorMega import MegaBackupCreator
+from .backupCreatorLocal import LocalBackupCreator
+from .backupCreatorMega import MegaBackupCreator
 from datetime import datetime
 import errno
 import shutil

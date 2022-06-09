@@ -20,5 +20,10 @@ Proyecto web para generar backups y almacenarlos en local o en la nube ([Mega](h
   - [ ] Generar una imagen docker (con etiqueta versión) para la rama main
 
 
+## Instalación de dependencias
+En el proyecto se distribuye un fichero (requirements.txt) con todas las dependencias. Para instalarlas
+basta con ejecutar:
+> pip install -r requirements.txt
+
 ## Licencia
 [GNU General Public License v3.0](https://github.com/TaixMiguel/TaixBackups/blob/main/LICENSE)
