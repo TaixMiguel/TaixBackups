@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="{{ url_for("static", filename="base.css") }}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<body class="w3-light-grey">
+    <div class="w3-content w3-margin-top" style="max-width:1400px;">
+        <div class="w3-row-padding">
+            <div class="w3-quarter">
+
+                <div class="w3-white w3-text-grey w3-card-4">
+                    <img src="https://www.muycomputer.com/wp-content/uploads/2021/03/D%C3%ADa_Mundial_del_Backup-1000x600.jpg" style="width:100%" />
+                    <div class="w3-container">
+                        <h4>{{ app_name }}</h4>
+                    </div>
+                </div>
+                <br />
+
+                <a href="/">
+                    <div class="item-menu">
+                        <div class="w3-container">
+                            <h4>Inicio</h4>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/newBackup">
+                    <div class="item-menu">
+                        <div class="w3-container">
+                            <h4>Nuevo backup</h4>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="w3-threequarter">
+                <div class="w3-panel w3-gray w3-center">
+                    <h1 class="w3-text-dark-gray" style="text-shadow:1px 1px 0 #444">
+                        <b>{{ app_name }}</b>
+                    </h1>
+                </div>
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <footer class="w3-display-container w3-gray w3-margin-top" style="height:50px;">
+        <div class="w3-display-middle">
+            <a href="https://github.com/TaixMiguel/TaixBackups" target="_blank"><i class="fa fa-github w3-hover-opacity w3-large"></i></a> |
+            ©<a href="https://github.com/TaixMiguel/" target="_blank">TaixMiguel</a> |
+            2022
+        </div>
+        <div class="w3-display-bottomright w3-small" style="padding-right: 5px; padding-bottom: 1px;">
+            Versión {{ app_version }}
+        </div>
+    </footer>
+</body>
+</html>

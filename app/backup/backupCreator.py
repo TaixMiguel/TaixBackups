@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 import getopt
-import toolBackupCreator
+from . import toolBackupCreator
 import sys
 
 
