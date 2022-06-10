@@ -24,7 +24,7 @@ class Backup(db.Model):
     def create_backup(self):
         tool = toolBackupCreator.get_instance_backup(backup_code=self.server, source_dir=self.source_dir,
                                                      destination_dir=self.destination_dir)
-        tool.create_backup()
+        tool.create_backup(user=self.user, password=self.password)
 
     @staticmethod
     def get_instance(id_backup: int):

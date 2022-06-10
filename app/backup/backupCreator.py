@@ -12,7 +12,7 @@ class BackupCreator(ABC):
         self.destination_dir = destination_dir
         self.filename_backup = filename_backup
 
-    def create_backup(self, date_format: str = "%Y%m%d_%H%M%S") -> bool:
+    def create_backup(self, user: str = "", password: str = "", date_format: str = "%Y%m%d_%H%M%S") -> bool:
         try:
             filename: str = toolBackupCreator.create_backup(source_dir=self.source_dir,
                                                             destination_dir=self.destination_dir,
@@ -21,13 +21,13 @@ class BackupCreator(ABC):
 
             # TODO: añadir línea al log
             print(f"Se procede a la subida del backup {filename} al servidor escogido")
-            self.upload_backup(filename_upload=filename)
+            self.upload_backup(filename_upload=filename, user=user, password=password)
         except FileNotFoundError:
             return False
         return True
 
     @abstractmethod
-    def upload_backup(self, filename_upload: str):
+    def upload_backup(self, filename_upload: str, user: str, password: str):
         pass
 
 
