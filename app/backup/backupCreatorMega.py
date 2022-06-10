@@ -11,11 +11,12 @@ class MegaBackupCreator(BackupCreator):
     def __init__(self, source_dir: str, destination_dir: str, filename_backup: str):
         super().__init__(source_dir=source_dir, destination_dir=destination_dir, filename_backup=filename_backup)
 
-    def upload_backup(self, filename_upload: str):
+    def upload_backup(self, filename_upload: str, user: str, password: str):
         # TODO: añadir línea al log (debug)
         print("Se inicia sesión en la cuenta de Mega")
-        # TODO: obtener los datos de otro sitio
-        mega = Mega().login(os.environ.get("mega_user"), os.environ.get("mega_pass"))
+        mega = Mega().login(user, password)
+        # TODO: controlar que el usuario logeado es el correcto y no el default
+        # print(mega.get_user())
         # TODO: añadir línea al log (debug)
         print("Cuenta de Mega iniciada")
 
