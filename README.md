@@ -5,7 +5,7 @@ Proyecto web para generar backups y almacenarlos en local o en la nube ([Mega](h
 ## Para hacer:
 - [ ] Lanzar un backup de forma manual
   - [x] Invocar backup desde la línea de comandos
-  - [ ] Generar backups desde la aplicación web
+  - [x] Generar backups desde la aplicación web
 - [ ] Programar el backup para ejecución diaria o por un cron
 - [x] Almacenamiento del backup
   - [x] En local
@@ -15,7 +15,9 @@ Proyecto web para generar backups y almacenarlos en local o en la nube ([Mega](h
   - [ ] Informar del próximo backup (fecha-hora y nombre del backup)
 - [ ] Montar la integración continua para el despliegue automático del proyecto
   - [ ] Definir un Dockerfile para poder generar una imagen con el proyecto web
-  - [ ] Generar una imagen docker (con etiqueta dev) para la rama dev
+    - [x] Definir un Dockerfile básico para ejecutar una app en modo dev
+    - [ ] Definir un Dockerfile para ejecutar una app segura en un entorno de producción
+  - [x] Generar una imagen docker (con etiqueta dev) para la rama dev
   - [ ] Generar una imagen docker (con etiqueta latest) para la rama main
   - [ ] Generar una imagen docker (con etiqueta versión) para la rama main
 
