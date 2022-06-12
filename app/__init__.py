@@ -9,9 +9,9 @@ migrate = Migrate()
 from . import routes
 
 
-def create_app(settings_module) -> Flask:
+def create_app() -> Flask:
     app: Flask = Flask(__name__, instance_relative_config=True)
-    app.config.from_object(settings_module)
+    app.config.from_object('config.default')
     app.config.from_pyfile('config.py', silent=True)
 
     db.init_app(app)
