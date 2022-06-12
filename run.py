@@ -2,4 +2,4 @@
 
 from app import create_app
 
-app = create_app('config.default')
+app = create_app()
