@@ -27,5 +27,16 @@ En el proyecto se distribuye un fichero (requirements.txt) con todas las depende
 basta con ejecutar:
 > pip install -r requirements.txt
 
+
+## Configuración personalizada
+Se puede personalizar la configuración creando una carpeta hermana a `config` llamada `instance` y dentro
+de ella crear un fichero llamado `config.py` con las variables de configuración que queremos sobreescribir.
+
+En este ejemplo, se sustituye la variable APP_ENV por el valor `development` así como la definición de la BBDD:
+```python
+SQLALCHEMY_DATABASE_URI = 'sqlite:///database2.db'
+APP_ENV = 'development'
+```
+
 ## Licencia
 [GNU General Public License v3.0](https://github.com/TaixMiguel/TaixBackups/blob/main/LICENSE)
