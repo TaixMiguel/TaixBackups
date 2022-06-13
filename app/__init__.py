@@ -48,6 +48,5 @@ def verbose_formatter(app):
 def check_database_exist(database_uri: str, app: Flask) -> None:
     from os.path import exists
     if not exists(database_uri):
-        # TODO: añadir línea al log
-        print(f"Se procede a crear la BBDD {database_uri}")
+        app.logger.info(f"Se procede a crear la BBDD {database_uri}")
         db.create_all(app=app)

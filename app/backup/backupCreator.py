@@ -3,7 +3,10 @@
 from abc import ABC, abstractmethod
 import getopt
 from . import toolBackupCreator
+import logging
 import sys
+
+logger = logging.getLogger(__name__)
 
 
 class BackupCreator(ABC):
@@ -19,8 +22,7 @@ class BackupCreator(ABC):
                                                             filename_backup=self.filename_backup,
                                                             date_format=date_format)
 
-            # TODO: añadir línea al log
-            print(f"Se procede a la subida del backup {filename} al servidor escogido")
+            logger.info(f"Se procede a la subida del backup {filename} al servidor escogido")
             self.upload_backup(filename_upload=filename, user=user, password=password)
         except FileNotFoundError:
             return False
