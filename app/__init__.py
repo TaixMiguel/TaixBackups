@@ -25,17 +25,30 @@ def create_app() -> Flask:
 
 def configure_logging(app):
     del app.logger.handlers[:]
-    loggers = [app.logger, ]
+    loggers = [app.logger]
+    handlers = get_handlers(app)
+
+    for log in loggers:
+        for handler in handlers:
+            log.addHandler(handler)
+        log.propagate = False
+        log.setLevel(app.config['LOG_LEVEL'])
+
+
+def get_handlers(app) -> []:
     handlers = []
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(verbose_formatter(app))
     console_handler.setLevel(app.config['LOG_LEVEL'])
     handlers.append(console_handler)
-    for log in loggers:
-        for handler in handlers:
-            log.addHandler(handler)
-        log.propagate = False
-        log.setLevel(logging.DEBUG)
+
+    if app.config['LOG_FILE']:
+        file_handler = logging.FileHandler(app.config['LOG_FILE'])
+        file_handler.setFormatter(verbose_formatter(app))
+        file_handler.setLevel(app.config['LOG_LEVEL'])
+        handlers.append(file_handler)
+
+    return handlers
 
 
 def verbose_formatter(app):
