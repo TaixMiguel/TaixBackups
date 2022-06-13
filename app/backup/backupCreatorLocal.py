@@ -2,7 +2,10 @@
 
 from .backupCreator import BackupCreator
 import os
+import logging
 import shutil
+
+logger = logging.getLogger(__name__)
 
 
 class LocalBackupCreator(BackupCreator):
@@ -11,10 +14,8 @@ class LocalBackupCreator(BackupCreator):
 
     def upload_backup(self, filename_upload: str):
         if not os.path.exists(self.destination_dir):
-            # TODO: añadir línea al log
-            print(f"El directorio {self.destination_dir} no existe, se crea de forma automática")
+            logger.info(f"El directorio {self.destination_dir} no existe, se crea de forma automática")
             os.makedirs(self.destination_dir)
 
         shutil.move(filename_upload, self.destination_dir)
-        # TODO: añadir línea al log
-        print(f"El fichero {filename_upload} se ha movido a la carpeta {self.destination_dir}")
+        logger.debug(f"El fichero {filename_upload} se ha movido a la carpeta {self.destination_dir}")
