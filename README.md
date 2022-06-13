@@ -32,10 +32,17 @@ basta con ejecutar:
 Se puede personalizar la configuración creando una carpeta hermana a `config` llamada `instance` y dentro
 de ella crear un fichero llamado `config.py` con las variables de configuración que queremos sobreescribir.
 
-En este ejemplo, se sustituye la variable APP_ENV por el valor `development` así como la definición de la BBDD:
+Fichero de ejemplo:
 ```python
-SQLALCHEMY_DATABASE_URI = 'sqlite:///database2.db'
+import logging
+
 APP_ENV = 'development'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///database2.db'
+
+# Logger
+LOG_LEVEL = logging.DEBUG
+LOG_FILE = 'taixBackups2.log'
+LOG_DATE_FORMAT = '%d/%m/%Y %H:%M:%S'
 ```
 
 ## Licencia
