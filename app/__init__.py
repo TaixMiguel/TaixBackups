@@ -19,7 +19,6 @@ def create_app() -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
     app.register_blueprint(app_bp)
-    check_database_exist('database.db', app)
     return app
 
 
@@ -56,10 +55,3 @@ def verbose_formatter(app):
         '[%(asctime)s.%(msecs)d]\t %(levelname)s \t[%(name)s.%(funcName)s:%(lineno)d]\t %(message)s',
         datefmt=app.config['LOG_DATE_FORMAT']
     )
-
-
-def check_database_exist(database_uri: str, app: Flask) -> None:
-    from os.path import exists
-    if not exists(database_uri):
-        app.logger.info(f"Se procede a crear la BBDD {database_uri}")
-        db.create_all(app=app)
