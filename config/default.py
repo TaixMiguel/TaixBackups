@@ -1,3 +1,4 @@
+import logging
 import secrets
 
 SECRET_KEY = secrets.token_hex(30)
@@ -6,5 +7,12 @@ SECRET_KEY = secrets.token_hex(30)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
 
+# Logger
+LOG_LEVEL = logging.INFO
+LOG_DATE_FORMAT = '%Y/%m/%d %H:%M:%S'
+LOG_FILE = 'taixBackups.log'
+
 # App environments
-APP_ENV = 'production'
+APP_ENV_DEVELOPMENT = 'development'
+APP_ENV_PRODUCTION = 'production'
+APP_ENV = APP_ENV_PRODUCTION
