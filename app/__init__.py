@@ -1,6 +1,7 @@
 from flask import Blueprint, Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 import logging
 
 app_bp = Blueprint('app', __name__, template_folder='templates')
@@ -42,7 +43,9 @@ def get_handlers(app) -> []:
     handlers.append(console_handler)
 
     if app.config['LOG_FILE']:
-        file_handler = logging.FileHandler(app.config['LOG_FILE'])
+        log_file: str = app.config['LOG_FILE']
+        log_file = log_file.replace("$DATE", datetime.datetime.now().strftime("%Y%m%d"))
+        file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(verbose_formatter(app))
         file_handler.setLevel(app.config['LOG_LEVEL'])
         handlers.append(file_handler)
