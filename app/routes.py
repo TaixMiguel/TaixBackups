@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
 from flask import render_template, redirect, url_for
-from . import app_bp
-from . import consts
-from . import forms
-from .models import Backup
+from app import app_bp
+from app import consts
+from app import forms
+from app.backup.backup import Backup
 
 
 @app_bp.route("/")

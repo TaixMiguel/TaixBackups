@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from .backupCreator import BackupCreator
+from app.backup.creator.backupCreator import BackupCreator
 import os
 import logging
 import shutil
@@ -12,7 +12,7 @@ class LocalBackupCreator(BackupCreator):
     def __init__(self, source_dir: str, destination_dir: str, filename_backup: str):
         super().__init__(source_dir=source_dir, destination_dir=destination_dir, filename_backup=filename_backup)
 
-    def upload_backup(self, filename_upload: str):
+    def upload_backup(self, filename_upload: str, user: str, password: str):
         if not os.path.exists(self.destination_dir):
             logger.info(f"El directorio {self.destination_dir} no existe, se crea de forma automática")
             os.makedirs(self.destination_dir)
