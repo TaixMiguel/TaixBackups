@@ -12,6 +12,7 @@
     </div>
     <div id="targetBackup{{backup.id}}" class="w3-container w3-card-4 w3-white w3-hide">
         <p>
+            {% if backup_history %}
             <div class="w3-row">
                 <div class="w3-container w3-quarter w3-right-align">
                     <strong>Última ejecución</strong>
@@ -26,6 +27,7 @@
                     {{backup_history.duration}} segundos
                 </div>
             </div>
+            {% endif %}
             <div class="w3-row">
                 <div class="w3-container w3-quarter w3-right-align">
                     <strong>Nº de backups máx.</strong>
@@ -43,6 +45,7 @@
             <div class="w3-container w3-large">{{backup.description}}</div>
         </p>
 
+        {% if backup_history %}
         <button onClick="$('#historicoBackup').toggleClass('w3-show')" class="w3-btn w3-block w3-gray w3-left-align">
             Consultar todas las ejecuciones
         </button>
@@ -69,6 +72,7 @@
             </table>
         </div>
         <br />
+        {% endif %}
     </div>
     <br />
         {% endfor %}
