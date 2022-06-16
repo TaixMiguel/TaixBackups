@@ -41,9 +41,12 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///database2.db'
 
 # Logger
 LOG_LEVEL = logging.DEBUG
-LOG_FILE = 'taixBackups2.log'
+LOG_FILE = 'taixBackups_$DATE.log'
 LOG_DATE_FORMAT = '%d/%m/%Y %H:%M:%S'
 ```
+
+Se puede añadir el código `$DATE` al fichero log para que se sustituya por el año, mes y día
+
 
 ## Licencia
 [GNU General Public License v3.0](https://github.com/TaixMiguel/TaixBackups/blob/main/LICENSE)
