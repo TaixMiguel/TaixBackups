@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from .backupCreator import BackupCreator
+from app.backup.creator.backupCreator import BackupCreator
 import errno
 import logging
 from mega import Mega
