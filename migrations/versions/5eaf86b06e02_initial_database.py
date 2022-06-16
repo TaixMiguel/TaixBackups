@@ -1,8 +1,8 @@
-"""Update dbackup & add hbackup
+"""Restore database
 
-Revision ID: 63513f3ec205
+Revision ID: 5eaf86b06e02
 Revises: 
-Create Date: 2022-06-16 17:32:10.604317
+Create Date: 2022-06-16 18:04:50.413049
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '63513f3ec205'
+revision = '5eaf86b06e02'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,8 +25,8 @@ def upgrade():
     sa.Column('server', sa.String(length=8), nullable=False),
     sa.Column('source_dir', sa.String(length=256), nullable=False),
     sa.Column('destination_dir', sa.String(length=256), nullable=False),
-    sa.Column('user', sa.String(length=64)),
-    sa.Column('password', sa.String(length=64)),
+    sa.Column('user', sa.String(length=64), nullable=False),
+    sa.Column('password', sa.String(length=64), nullable=False),
     sa.Column('n_backups_max', sa.Integer(), nullable=True),
     sa.Column('sw_sensor_mqtt', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
