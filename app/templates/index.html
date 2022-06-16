@@ -24,7 +24,7 @@
                     <strong>Duración</strong>
                 </div>
                 <div class="w3-container w3-quarter">
-                    {{backup_history.duration}} segundos
+                    {{backup_history.format_duration()}}
                 </div>
             </div>
             {% endif %}
@@ -63,7 +63,7 @@
                 <tr>
                     <td class="w3-left">{{loop.index}}.</td>
                     <td class="w3-center">{{history.audit_date.strftime('%d/%m/%Y %H:%M:%S')}}</td>
-                    <td class="w3-center" title="{{history.duration}} segundos">{{history.format_duration()}}</td>
+                    <td class="w3-center">{{history.format_duration()}}</td>
                     <td class="w3-center">{{history.backup_name}}</td>
                     <td class="w3-center">{{history.backup_size}}</td>
                     <td class="w3-center">{{'Correcto' if history.status else 'Error'}}</td>
