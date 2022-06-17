@@ -31,7 +31,6 @@ class BackupHistory(db.Model):
         db.session.commit()
 
     def format_duration(self) -> str:
-        # TODO: actualizar el algoritmo cuando se tenga una duración válida
-        hours, seconds = divmod(self.duration * 60, 3600)
-        minutes, seconds = divmod(seconds, 60)
+        minutes, seconds = divmod(self.duration, 60)
+        hours, minutes = divmod(minutes, 60)
         return "{:02.0f}:{:02.0f}:{:02.0f}".format(hours, minutes, seconds)
