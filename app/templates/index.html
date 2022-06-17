@@ -46,10 +46,10 @@
         </p>
 
         {% if backup_history %}
-        <button onClick="$('#historicoBackup').toggleClass('w3-show')" class="w3-btn w3-block w3-gray w3-left-align">
+        <button onClick="$('#historicoBackup{{backup.id}}').toggleClass('w3-show')" class="w3-btn w3-block w3-gray w3-left-align">
             Consultar todas las ejecuciones
         </button>
-        <div id="historicoBackup" class="w3-hide">
+        <div id="historicoBackup{{backup.id}}" class="w3-hide">
             <table class="w3-table-all w3-striped w3-border">
                 <tr>
                     <th></th>
