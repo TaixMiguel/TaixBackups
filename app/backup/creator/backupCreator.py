@@ -11,27 +11,33 @@ logger = logging.getLogger(__name__)
 
 class BackupCreator(ABC):
     def __init__(self, source_dir: str, destination_dir: str, filename_backup: str):
+        self.user: str = None
+        self.password: str = None
         self.source_dir = source_dir
         self.destination_dir = destination_dir
         self.filename_backup = filename_backup
 
-    def create_backup(self, user: str = "", password: str = "", date_format: str = "%Y%m%d_%H%M%S") -> str:
-        try:
-            filename: str = toolBackupCreator.create_backup(source_dir=self.source_dir,
-                                                            destination_dir=self.destination_dir,
-                                                            filename_backup=self.filename_backup,
-                                                            date_format=date_format)
+    def set_user(self, user: str = "", password: str = ""):
+        self.user = user
+        self.password = password
 
-            logger.info(f"Se procede a la subida del backup {filename} al servidor escogido")
-            # TODO: obtener el tamaño del backup
-            self.upload_backup(filename_upload=filename, user=user, password=password)
-            return filename
-        except FileNotFoundError:
-            return None
-        return None
+    def create_backup(self, date_format: str = "%Y%m%d_%H%M%S") -> str:
+        filename: str = toolBackupCreator.create_backup(source_dir=self.source_dir,
+                                                        destination_dir=self.destination_dir,
+                                                        filename_backup=self.filename_backup,
+                                                        date_format=date_format)
+
+        logger.info(f"Se procede a la subida del backup '{filename}' al servidor escogido")
+        # TODO: obtener el tamaño del backup
+        self.upload_backup(filename_upload=filename)
+        return filename
 
     @abstractmethod
-    def upload_backup(self, filename_upload: str, user: str, password: str):
+    def upload_backup(self, filename_upload: str):
+        pass
+
+    @abstractmethod
+    def remove_backup(self, filename_backup: str):
         pass
 
 
@@ -61,5 +67,5 @@ if __name__ == '__main__':
     if not destination:
         destination = input("Directorio donde guardar la copia: ")
 
-    backup = toolBackupCreator.get_instance_backup(backup_type, source_dir=source, destination_dir=destination)
-    backup.create_backup()
+    creator = toolBackupCreator.get_instance_creator(backup_type, source_dir=source, destination_dir=destination)
+    creator.create_backup()

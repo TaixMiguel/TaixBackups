@@ -29,35 +29,40 @@ class Backup(db.Model):
             db.session.add(self)
         db.session.commit()
 
-    def create_backup(self) -> None:
+    def create_backup(self) -> bool:
         status: bool = False
-        logger.info(f"Se lanza la creación del Backup {self.name}")
+        logger.info(f"Se lanza la creación del Backup '{self.name}'")
         time_start = time.perf_counter()
         try:
-            logger.debug(f"Se instancia el tipo de Backup {self.server}")
-            tool = toolBackupCreator.get_instance_backup(backup_code=self.server, source_dir=self.source_dir,
-                                                         destination_dir=self.destination_dir)
+            logger.debug(f"Se instancia el tipo de Backup '{self.server}'")
+            backup_creator = toolBackupCreator.get_instance_creator(backup_code=self.server, source_dir=self.source_dir,
+                                                                    destination_dir=self.destination_dir)
+            if self.user:
+                backup_creator.set_user(user=self.user, password=self.password)
             logger.debug("Se ejecuta la creación del Backup")
             # TODO: obtener el tamaño del fichero generado
-            filename = tool.create_backup(user=self.user, password=self.password)
+            filename = backup_creator.create_backup()
             status = True
         except FileNotFoundError as error:
+            logger.info(f"El backup '{self.name}' no se ha generado")
+            # TODO: eliminar el backup generado, si se ha generado
             logger.exception(error)
+            filename = 'No generado'
         time_end = time.perf_counter()
 
-        logger.debug(f"Se registra un histórico asociado al Backup")
+        logger.debug(f"Se registra un histórico asociado al Backup '{self.name}'")
         history: BackupHistory = BackupHistory(id_backup_fk=self.id, backup_name=filename, backup_size=0, status=status,
                                                duration=time_end-time_start)
         history.save()
 
         while self.__get_number_history_correct() > self.n_backups_max:
-            logger.debug(f"Se elimina el primer histórico del backup {self.name} por pasarnos del tope "
+            logger.debug(f"Se elimina el primer histórico del backup '{self.name}' por pasarnos del tope de "
                          f"{self.n_backups_max}")
-            # TODO: eliminar histórico completo (fichero incluido)
-            self.__remove_first_history()
+            self.__remove_first_history(backup_creator)
 
         # TODO: actualizar sensor MQTT si procede
         # TODO: actualizar sensor MQTT concreto si procede
+        return status
 
     def get_last_history(self) -> BackupHistory:
         return BackupHistory.query.filter_by(id_backup_fk=self.id).order_by(BackupHistory.id.desc()).first()
@@ -69,8 +74,10 @@ class Backup(db.Model):
     def __get_number_history_correct(self) -> int:
         return BackupHistory.query.filter_by(id_backup_fk=self.id).filter_by(status=True).count()
 
-    def __remove_first_history(self) -> None:
-        self.get_history()[0].delete()
+    def __remove_first_history(self, backup_creator) -> None:
+        history: BackupHistory = self.get_history()[0]
+        backup_creator.remove_backup(history.backup_name)
+        history.delete()
 
     @staticmethod
     def get_instance(id_backup: int):
