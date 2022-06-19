@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect
 from app import app_bp
 from app import consts
 from app import forms
@@ -16,8 +16,8 @@ def index():
 @app_bp.route("/execBackup/<int:id_backup>/")
 def exec_backup(id_backup):
     backup = Backup.get_instance(id_backup)
-    backup.create_backup()
-    return "Ejecutando el backup {}".format(backup.name)
+    status: bool = backup.create_backup()
+    return f"Backup '{backup.name}' ejecutado {'correctamente' if status else 'con errores'}"
 
 
 @app_bp.route("/newBackup", methods=["GET", "POST"])
