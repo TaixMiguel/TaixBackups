@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 import getopt
 from app.backup.creator import toolBackupCreator
 import logging
+import os
 import sys
 
 logger = logging.getLogger(__name__)
@@ -11,15 +12,16 @@ logger = logging.getLogger(__name__)
 
 class BackupCreator(ABC):
     def __init__(self, source_dir: str, destination_dir: str, filename_backup: str):
-        self.user: str = None
-        self.password: str = None
+        self.size = None
+        self._user: str = None
+        self._password: str = None
         self.source_dir = source_dir
         self.destination_dir = destination_dir
         self.filename_backup = filename_backup
 
     def set_user(self, user: str = "", password: str = ""):
-        self.user = user
-        self.password = password
+        self._user = user
+        self._password = password
 
     def create_backup(self, date_format: str = "%Y%m%d_%H%M%S") -> str:
         filename: str = toolBackupCreator.create_backup(source_dir=self.source_dir,
@@ -27,8 +29,8 @@ class BackupCreator(ABC):
                                                         filename_backup=self.filename_backup,
                                                         date_format=date_format)
 
+        self.size: int = os.path.getsize(filename)
         logger.info(f"Se procede a la subida del backup '{filename}' al servidor escogido")
-        # TODO: obtener el tamaño del backup
         self.upload_backup(filename_upload=filename)
         return filename
 

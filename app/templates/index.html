@@ -65,7 +65,7 @@
                     <td class="w3-center">{{history.audit_date.strftime('%d/%m/%Y %H:%M:%S')}}</td>
                     <td class="w3-center">{{history.format_duration()}}</td>
                     <td class="w3-center">{{history.backup_name}}</td>
-                    <td class="w3-center">{{history.backup_size}}</td>
+                    <td class="w3-center">{{history.format_size()}}</td>
                     <td class="w3-center">{{'Correcto' if history.status else 'Error'}}</td>
                 </tr>
             {% endfor %}
