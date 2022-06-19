@@ -51,7 +51,8 @@ class Backup(db.Model):
         time_end = time.perf_counter()
 
         logger.debug(f"Se registra un histórico asociado al Backup '{self.name}'")
-        history: BackupHistory = BackupHistory(id_backup_fk=self.id, backup_name=filename, backup_size=0, status=status,
+        history: BackupHistory = BackupHistory(id_backup_fk=self.id, backup_name=filename,
+                                               backup_size=backup_creator.size, status=status,
                                                duration=time_end-time_start)
         history.save()
 

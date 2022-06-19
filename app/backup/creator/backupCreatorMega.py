@@ -12,13 +12,13 @@ logger = logging.getLogger(__name__)
 
 class MegaBackupCreator(BackupCreator):
     def __init__(self, source_dir: str, destination_dir: str, filename_backup: str):
-        super().__init__(source_dir=source_dir, destination_dir=destination_dir, filename_backup=filename_backup)
+        BackupCreator.__init__(self, source_dir=source_dir, destination_dir=destination_dir, filename_backup=filename_backup)
         # TODO: serializar el diccionario si fuera posible
         self.folders: dict = {}
 
     def __login_mega(self):
         logger.debug("Se inicia sesión en la cuenta de Mega")
-        mega = Mega().login(self.user, self.password)
+        mega = Mega().login(self._user, self._password)
         # TODO: controlar que el usuario logeado es el correcto y no el default
         # print(mega.get_user())
         logger.debug("Cuenta de Mega iniciada")
