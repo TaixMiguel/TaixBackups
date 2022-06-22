@@ -16,3 +16,8 @@ LOG_FILE = 'taixBackups'
 APP_ENV_DEVELOPMENT = 'development'
 APP_ENV_PRODUCTION = 'production'
 APP_ENV = APP_ENV_PRODUCTION
+
+# MQTT
+MQTT_SERVER = ''
+MQTT_USER = ''
+MQTT_PASS = ''

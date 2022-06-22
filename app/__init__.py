@@ -1,5 +1,6 @@
 from logging.handlers import TimedRotatingFileHandler
 
+from app.toolInit import ToolInit
 from flask import Blueprint, Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -22,6 +23,8 @@ def create_app() -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
     app.register_blueprint(app_bp)
+    tool: ToolInit = ToolInit(application=app)
+    tool.iniciar_servicios()
     return app
 
 
