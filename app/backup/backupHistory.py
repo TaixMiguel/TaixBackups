@@ -36,7 +36,6 @@ class BackupHistory(db.Model):
         return "{:02.0f}:{:02.0f}:{:02.0f}".format(hours, minutes, seconds)
 
     def format_size(self) -> str:
-        if self.backup_size > 1024:
-            megas, bytes = divmod(self.backup_size, 1024)
-            return "{:01.0f} MB {:01.0f} B".format(megas, bytes)
+        if self.backup_size > (1024 * 1024):
+            return "{:01.0f} MB".format(self.backup_size / (1024 * 1024))
         return "{:01.0f} B".format(self.backup_size)
