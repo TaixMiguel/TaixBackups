@@ -4,6 +4,7 @@ from app import db
 from app.backup.backupHistory import BackupHistory
 from app.backup.creator import toolBackupCreator
 from app.consts import Database
+from app.mqtt import mqtt
 import logging
 import time
 
@@ -40,7 +41,6 @@ class Backup(db.Model):
             if self.user:
                 backup_creator.set_user(user=self.user, password=self.password)
             logger.debug("Se ejecuta la creación del Backup")
-            # TODO: obtener el tamaño del fichero generado
             filename = backup_creator.create_backup()
             status = True
         except FileNotFoundError as error:
@@ -61,8 +61,17 @@ class Backup(db.Model):
                          f"{self.n_backups_max}")
             self.__remove_first_history(backup_creator)
 
-        # TODO: actualizar sensor MQTT si procede
+        if status:
+            client_mqtt: mqtt.MQTT = mqtt.MQTT()
+            state_topic: str = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastBackup')
+            client_mqtt.send_message(topic=state_topic, payload=self.name, retain=True)
+
+            state_topic: str = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastExecution')
+            client_mqtt.send_message(topic=state_topic, payload=int(time.time()), retain=True)
+            client_mqtt.disconnect()
+
         # TODO: actualizar sensor MQTT concreto si procede
+        # if self.sw_sensor_mqtt:
         return status
 
     def get_last_history(self) -> BackupHistory:

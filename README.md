@@ -11,7 +11,8 @@ Proyecto web para generar backups y almacenarlos en local o en la nube ([Mega](h
   - [x] En local
   - [x] En la nube de [Mega](https://mega.io/)
 - [ ] Montar sensores MQTT para informar de los backups
-  - [ ] Informar del último backup realizado (fecha-hora, nombre del backup y estado)
+  - [x] Informar del último backup realizado (fecha-hora, nombre del backup ~~y estado~~)
+  - [ ] Informar del estado del último backup realizado (de forma individual) (fecha-hora, nombre del backup y estado)
   - [ ] Informar del próximo backup (fecha-hora y nombre del backup)
 - [ ] Montar la integración continua para el despliegue automático del proyecto
   - [ ] Definir un Dockerfile para poder generar una imagen con el proyecto web
@@ -43,6 +44,11 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///database2.db'
 LOG_LEVEL = logging.DEBUG
 LOG_FILE = 'taixBackups'
 LOG_DATE_FORMAT = '%d/%m/%Y %H:%M:%S'
+
+# MQTT
+MQTT_SERVER = ''
+MQTT_USER = ''
+MQTT_PASS = ''
 ```
 
 
