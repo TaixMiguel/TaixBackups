@@ -19,8 +19,8 @@ Proyecto web para generar backups y almacenarlos en local o en la nube ([Mega](h
     - [x] Definir un Dockerfile básico para ejecutar una app en modo dev
     - [ ] Definir un Dockerfile para ejecutar una app segura en un entorno de producción
   - [x] Generar una imagen docker (con etiqueta dev) para la rama dev
-  - [ ] Generar una imagen docker (con etiqueta latest) para la rama main
-  - [ ] Generar una imagen docker (con etiqueta versión) para la rama main
+  - [x] Generar una imagen docker (con etiqueta latest) para la rama main
+  - [x] Generar una imagen docker (con etiqueta versión) para la rama main
 
 
 ## Instalación de dependencias
