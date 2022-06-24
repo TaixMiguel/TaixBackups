@@ -21,9 +21,10 @@ jobs:
           username: omikel8
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push (latest)
+      - name: Build and push (dev)
         uses: docker/build-push-action@v3
         with:
           push: true
+          file: Dockerfile.dev
           tags: omikel8/taix_backups:dev
           platforms: linux/amd64,linux/arm64
