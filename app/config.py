@@ -1,8 +1,11 @@
 #!/usr/bin/python3
 
 import app
+import logging
 import paho.mqtt.client as mqtt
 from threading import Lock
+
+logger = logging.getLogger(__name__)
 
 
 class __SingletonConfig(type):
@@ -30,6 +33,8 @@ class Config(metaclass=__SingletonConfig):
     def get_client_mqtt(self) -> mqtt.Client:
         client: mqtt.Client = None
         if self.sw_mqtt():
+            logger.debug(f"Se conecta el cliente MQTT 'TaixBackups' contra el servidor "
+                         f"{self.__application.config['MQTT_SERVER']}")
             client = mqtt.Client('TaixBackups')
             client.username_pw_set(username=self.__application.config['MQTT_USER'],
                                    password=self.__application.config['MQTT_PASS'])
