@@ -62,12 +62,15 @@ class Backup(db.Model):
             self.__remove_first_history(backup_creator)
 
         if status:
+            logger.debug(f"Se informa de la generación del backup {self.name} por MQTT")
             client_mqtt: mqtt.MQTT = mqtt.MQTT()
             state_topic: str = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastBackup')
             client_mqtt.send_message(topic=state_topic, payload=self.name, retain=True)
+            logger.debug(f"Mensaje MQTT '{state_topic}' => '{self.name}' enviado")
 
             state_topic: str = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastExecution')
             client_mqtt.send_message(topic=state_topic, payload=int(time.time()), retain=True)
+            logger.debug(f"Mensaje MQTT '{state_topic}' => '{int(time.time())}' enviado")
             client_mqtt.disconnect()
 
         # TODO: actualizar sensor MQTT concreto si procede
