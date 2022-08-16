@@ -5,6 +5,9 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Sin versión]
+
+
+## [0.0.2_alpha] - 16/08/2022
 ### Añadido
 - Archivo entrypoint.sh para actualizar la BBDD al inicio y levantar la app
 - Histórico de backups
