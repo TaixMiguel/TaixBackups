@@ -4,6 +4,7 @@ import app
 from app import consts
 from app.config import Config
 from app.mqtt import mqtt, mqttDiscovery
+from app.cron.daemonWatcher import DaemonWatcher
 from app.mqtt.mqttDiscovery import MQTTDevice, MQTTEntity
 import logging
 
@@ -41,6 +42,29 @@ def create_sensor_last_backup(client_mqtt: mqtt.MQTT, device: MQTTDevice, backup
                   payload=entity_last_backup.format_json())
 
 
+def servicios_mqtt() -> None:
+    if not Config().sw_mqtt():
+        return
+
+    logger.debug("Se lanza el servicio MQTT")
+    device: MQTTDevice = MQTTDevice(manufacturer='TaixMiguel', name=consts.APP_NAME, model='TaixBackups',
+                                    version=consts.APP_VERSION)
+    device.add_identifier('taix_generador_backups')
+
+    client_mqtt: mqtt.MQTT = mqtt.MQTT()
+    create_sensor_last_execution(client_mqtt=client_mqtt, device=device)
+    create_sensor_last_backup(client_mqtt=client_mqtt, device=device)
+    client_mqtt.disconnect()
+
+    # TODO: llamar a todas las instancias de Backup y crear su entidad correspondiente
+
+
+def servicios_cron() -> None:
+    logger.debug("Se lanza el vigilador de demonios")
+    daemon_watcher: DaemonWatcher = DaemonWatcher()
+    daemon_watcher.run()
+
+
 class ToolInit:
     __app: app
 
@@ -51,20 +75,5 @@ class ToolInit:
         logger.debug("Se lanzan el resto de servicios definidos en el arranque")
         configuration: Config = Config()
         configuration.load(application=self.__app)
-        self.servicios_mqtt()
-
-    def servicios_mqtt(self) -> None:
-        if not Config().sw_mqtt():
-            return
-
-        logger.debug("Se lanza el servicio MQTT")
-        device: MQTTDevice = MQTTDevice(manufacturer='TaixMiguel', name=consts.APP_NAME, model='TaixBackups',
-                                        version=consts.APP_VERSION)
-        device.add_identifier('taix_generador_backups')
-
-        client_mqtt: mqtt.MQTT = mqtt.MQTT()
-        create_sensor_last_execution(client_mqtt=client_mqtt, device=device)
-        create_sensor_last_backup(client_mqtt=client_mqtt, device=device)
-        client_mqtt.disconnect()
-
-        # TODO: llamar a todas las instancias de Backup y crear su entidad correspondiente
+        servicios_mqtt()
+        servicios_cron()
