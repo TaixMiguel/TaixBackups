@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from .backupCreatorLocal import LocalBackupCreator
-from .backupCreatorMega import MegaBackupCreator
+from app.backup.creator.backupCreatorLocal import LocalBackupCreator
+from app.backup.creator.backupCreatorMega import MegaBackupCreator
 from datetime import datetime
 import errno
 import logging
@@ -11,7 +11,7 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def get_instance_backup(backup_code: str, source_dir: str, destination_dir: str, filename_backup: str = "backup"):
+def get_instance_creator(backup_code: str, source_dir: str, destination_dir: str, filename_backup: str = "backup"):
     if backup_code in ('local', 'LOCAL'):
         return LocalBackupCreator(source_dir=source_dir, destination_dir=destination_dir,
                                   filename_backup=filename_backup)

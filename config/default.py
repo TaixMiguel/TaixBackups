@@ -10,9 +10,14 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
 # Logger
 LOG_LEVEL = logging.INFO
 LOG_DATE_FORMAT = '%Y/%m/%d %H:%M:%S'
-LOG_FILE = 'taixBackups.log'
+LOG_FILE = 'taixBackups'
 
 # App environments
 APP_ENV_DEVELOPMENT = 'development'
 APP_ENV_PRODUCTION = 'production'
 APP_ENV = APP_ENV_PRODUCTION
+
+# MQTT
+MQTT_SERVER = ''
+MQTT_USER = ''
+MQTT_PASS = ''

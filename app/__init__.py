@@ -1,6 +1,10 @@
+from logging.handlers import TimedRotatingFileHandler
+
+from app.toolInit import ToolInit
 from flask import Blueprint, Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 import logging
 
 app_bp = Blueprint('app', __name__, template_folder='templates')
@@ -19,7 +23,8 @@ def create_app() -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
     app.register_blueprint(app_bp)
-    check_database_exist('database.db', app)
+    tool: ToolInit = ToolInit(application=app)
+    tool.iniciar_servicios()
     return app
 
 
@@ -43,7 +48,7 @@ def get_handlers(app) -> []:
     handlers.append(console_handler)
 
     if app.config['LOG_FILE']:
-        file_handler = logging.FileHandler(app.config['LOG_FILE'])
+        file_handler = TimedRotatingFileHandler(app.config['LOG_FILE'], when='D', interval=1, backupCount=7)
         file_handler.setFormatter(verbose_formatter(app))
         file_handler.setLevel(app.config['LOG_LEVEL'])
         handlers.append(file_handler)
@@ -56,10 +61,3 @@ def verbose_formatter(app):
         '[%(asctime)s.%(msecs)d]\t %(levelname)s \t[%(name)s.%(funcName)s:%(lineno)d]\t %(message)s',
         datefmt=app.config['LOG_DATE_FORMAT']
     )
-
-
-def check_database_exist(database_uri: str, app: Flask) -> None:
-    from os.path import exists
-    if not exists(database_uri):
-        app.logger.info(f"Se procede a crear la BBDD {database_uri}")
-        db.create_all(app=app)
