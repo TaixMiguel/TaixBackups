@@ -4,10 +4,12 @@
     {% if backups is defined and backups|length > 0 %}
         {% for backup in backups %}
             {% set backup_history =  backup.get_last_history() %}
-    <div class="w3-container w3-gray">
+    <div class="w3-panel w3-display-container w3-gray" style="margin-bottom: 0px;">
+        <span onclick="location.href = '/execBackup/{{backup.id}}';" class="w3-button w3-display-right">
+            <i class="fa fa-play w3-right w3-xxxlarge" title="Lanzar backup"></i>
+        </span>
         <h2 style="cursor: pointer;" onClick="$('#targetBackup{{backup.id}}').toggleClass('w3-hide');">
             {{backup.name}}
-            <i class="fa fa-play w3-right" title="Lanzar backup" onClick="location.href = '/execBackup/{{backup.id}}';"></i>
         </h2>
     </div>
     <div id="targetBackup{{backup.id}}" class="w3-container w3-card-4 w3-white w3-hide">
