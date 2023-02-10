@@ -23,6 +23,9 @@ class Backup(models.Model):
                                       help_text='Indica la fecha de alta del backup',
                                       default=django.utils.timezone.now)
 
+    def create_backup(self) -> None:
+        pass
+
 class BackupHistory(models.Model):
 
     id_backup_history = models.AutoField(primary_key=True)
@@ -35,3 +38,13 @@ class BackupHistory(models.Model):
     audit_time = models.DateTimeField('Fecha de creación',
                                       help_text='Indica la fecha de creación del backup',
                                       default=django.utils.timezone.now)
+
+    def format_duration(self) -> str:
+        minutes, seconds = divmod(self.duration, 60)
+        hours, minutes = divmod(minutes, 60)
+        return "{:02.0f}:{:02.0f}:{:02.0f}".format(hours, minutes, seconds)
+
+    def format_size(self) -> str:
+        if self.backup_size > (1024 * 1024):
+            return "{:01.0f} MB".format(self.backup_size / (1024 * 1024))
+        return "{:01.0f} B".format(self.backup_size)
