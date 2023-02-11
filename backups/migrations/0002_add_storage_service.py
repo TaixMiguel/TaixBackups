@@ -7,6 +7,7 @@ from backups.models import StorageService
 
 def add_storage_service(apps, schema_editor):
     StorageService(code='MEGA', name='MEGA').save()
+    StorageService(code='LOCAL', name='Local').save()
 
 
 class Migration(migrations.Migration):

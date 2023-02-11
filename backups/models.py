@@ -15,9 +15,9 @@ class Backup(models.Model):
     id_storage_service_fK = models.ForeignKey(StorageService, help_text='Código del servicio de almacenamiento', on_delete=models.CASCADE)
     source_dir = models.CharField(max_length=256)
     destination_dir = models.CharField(max_length=256)
-    user = models.CharField(max_length=64, help_text='Usuario del servicio de almacenamiento')
-    password = models.CharField(max_length=64, help_text='Contraseña del servicio de almacenamiento')
-    n_backups_max = models.IntegerField(max_length=3, help_text='Nº de backups disponibles', default=10)
+    user = models.CharField(max_length=64, help_text='Usuario del servicio de almacenamiento', null=True)
+    password = models.CharField(max_length=64, help_text='Contraseña del servicio de almacenamiento', null=True)
+    n_backups_max = models.IntegerField(help_text='Nº de backups disponibles', default=10)
     sw_sensor_mqtt = models.BooleanField(help_text='Avisar por MQTT de cambios', default=False)
     audit_time = models.DateTimeField('Fecha de creación',
                                       help_text='Indica la fecha de alta del backup',
