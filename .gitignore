@@ -2,4 +2,5 @@
 /instance
 /venv
 /taixBackups.log
+/taixBackups_rq.log
 db.sqlite3

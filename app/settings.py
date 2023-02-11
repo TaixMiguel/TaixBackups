@@ -107,3 +107,52 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 RQ_QUEUES = {
     "default": {"HOST": "localhost", "PORT": 6379, "DB": 0, "DEFAULT_TIMEOUT": 360,},
 }
+
+# Configuration of log
+level_log = os.environ.get('TAIX_BACKUPS_LEVEL_LOG', 'INFO')
+path_log = os.environ.get('TAIX_BACKUPS_PATH_LOG', BASE_DIR)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'root': {'level': level_log, 'handlers': ['file']},
+    'handlers': {
+        'file': {
+            'level': level_log,
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(path_log, 'taixBackups.log'),
+            'formatter': 'app',
+        },
+        'file_rq': {
+            'level': level_log,
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(path_log, 'taixBackups_rq.log'),
+            'formatter': 'app',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': level_log,
+            'propagate': True
+        },
+        'rq.worker': {
+            'handlers': ['file_rq'],
+            'level': level_log,
+            'propagate': True
+        },
+    },
+    'formatters': {
+        'app': {
+            'format': (
+                u'%(asctime)s [%(levelname)-8s] '
+                '(%(module)s.%(funcName)s) %(message)s'
+            ),
+            'datefmt': '%Y/%m/%d %H:%M:%S',
+        },
+    },
+}
+
+if DEBUG:
+    LOGGING['root']['handlers'] = ['file', 'console']
+    LOGGING['handlers']['console'] = {'level': 'DEBUG', 'class': 'logging.StreamHandler', 'formatter': 'console'}
+    LOGGING['formatters']['console'] = {'format': u'[%(levelname)-8s] (%(module)s.%(funcName)s) %(message)s'}
