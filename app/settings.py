@@ -111,10 +111,12 @@ RQ_QUEUES = {
 # Configuration of log
 level_log = os.environ.get('TAIX_BACKUPS_LEVEL_LOG', 'INFO')
 path_log = os.environ.get('TAIX_BACKUPS_PATH_LOG', BASE_DIR)
+if DEBUG:
+    level_log = 'DEBUG'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'root': {'level': level_log, 'handlers': ['file']},
+    'root': {'level': level_log, 'handlers': ['file', 'file_rq']},
     'handlers': {
         'file': {
             'level': level_log,
@@ -153,6 +155,6 @@ LOGGING = {
 }
 
 if DEBUG:
-    LOGGING['root']['handlers'] = ['file', 'console']
+    LOGGING['root']['handlers'] = ['file', 'file_rq', 'console']
     LOGGING['handlers']['console'] = {'level': 'DEBUG', 'class': 'logging.StreamHandler', 'formatter': 'console'}
     LOGGING['formatters']['console'] = {'format': u'[%(levelname)-8s] (%(module)s.%(funcName)s) %(message)s'}

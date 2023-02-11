@@ -7,6 +7,7 @@ import shutil
 import os
 
 from backups.creator.backupCreatorLocal import LocalBackupCreator
+from backups.creator.backupCreatorMega import MegaBackupCreator
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +16,9 @@ def get_instance_creator(backup_code: str, source_dir: str, destination_dir: str
     if backup_code in ('local', 'LOCAL'):
         return LocalBackupCreator(source_dir=source_dir, destination_dir=destination_dir,
                                   filename_backup=filename_backup)
+    if backup_code in ('mega', 'MEGA'):
+        return MegaBackupCreator(source_dir=source_dir, destination_dir=destination_dir,
+                                 filename_backup=filename_backup)
     # TODO: implementar servicio MEGA
     logger.error(f"No se ha encontrado instancia con el código '{backup_code}'")
 
