@@ -2,11 +2,15 @@ import dj_database_url
 import os
 from pathlib import Path
 
+from app import kTaixBackups
+from app.configApp import ConfigApp
+
+configApp: ConfigApp = ConfigApp()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-gzh1)=p6c*$eog8nag#c!(%xf7sjgg8n+u)w%$ro!=0tghoh7a')
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
+SECRET_KEY = configApp.get_value(kTaixBackups.Config.Application.ROOT, kTaixBackups.Config.Application.SECRET_KEY, 'django-insecure-gzh1)=p6c*$eog8nag#c!(%xf7sjgg8n+u)w%$ro!=0tghoh7a')
+DEBUG = configApp.get_value_boolean(kTaixBackups.Config.Application.ROOT, kTaixBackups.Config.Application.DEBUG_MODE, True)
 ALLOWED_HOSTS = ['*']
 
 
@@ -105,14 +109,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configuration of Django-RQ
 RQ_QUEUES = {
-    "default": {"HOST": "localhost", "PORT": 6379, "DB": 0, "DEFAULT_TIMEOUT": 360,},
+    'default': {
+        'HOST': configApp.get_value(kTaixBackups.Config.DjangoRQ.ROOT, kTaixBackups.Config.DjangoRQ.HOST, 'localhost'),
+        'PORT': configApp.get_value_integer(kTaixBackups.Config.DjangoRQ.ROOT, kTaixBackups.Config.DjangoRQ.PORT, 6379),
+        'DB': configApp.get_value_integer(kTaixBackups.Config.DjangoRQ.ROOT, kTaixBackups.Config.DjangoRQ.DB, 0),
+        'DEFAULT_TIMEOUT': configApp.get_value_integer(kTaixBackups.Config.DjangoRQ.ROOT, kTaixBackups.Config.DjangoRQ.TIMEOUT, 360),
+    }
 }
 
 # Configuration of log
-level_log = os.environ.get('TAIX_BACKUPS_LEVEL_LOG', 'INFO')
-path_log = os.environ.get('TAIX_BACKUPS_PATH_LOG', BASE_DIR)
-if DEBUG:
-    level_log = 'DEBUG'
+level_log = configApp.get_value(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.LEVEL_LOG, 'INFO')
+path_log = configApp.get_value(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.PATH, BASE_DIR)
+#if DEBUG:
+#    level_log = 'DEBUG'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
