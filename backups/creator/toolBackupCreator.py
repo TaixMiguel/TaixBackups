@@ -19,7 +19,6 @@ def get_instance_creator(backup_code: str, source_dir: str, destination_dir: str
     if backup_code in ('mega', 'MEGA'):
         return MegaBackupCreator(source_dir=source_dir, destination_dir=destination_dir,
                                  filename_backup=filename_backup)
-    # TODO: implementar servicio MEGA
     logger.error(f"No se ha encontrado instancia con el código '{backup_code}'")
 
 

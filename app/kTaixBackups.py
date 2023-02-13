@@ -18,3 +18,19 @@ class Config:
         ROOT = 'log'
         LEVEL_LOG = 'levelLog'
         PATH = 'path'
+
+    class MQTT:
+        ROOT = 'mqtt'
+        SWITCH_ENABLED = 'enabled'
+        PASS = 'password'
+        SERVER = 'server'
+        USER = 'username'
+
+class Backup:
+    STATUS_COMPLETE: str = 'COMPLETE'
+    STATUS_ERROR: str = 'ERROR'
+    STATUS_PDTE: str = 'PDTE'
+
+class MQTT:
+    TOPIC: str = '/taixBackups/'
+    BACKUP_GLOBAL: str = 'global'
