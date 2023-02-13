@@ -1,7 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-echo "Control de la BBDD"
-flask db upgrade
+echo "-> Apply database migrations"
+python3 manage.py migrate --run-syncdb
 
-echo "Se levanta el servidor"
-python3 -m flask run --host=0.0.0.0
+echo "-> Starting rq worker"
+python3 manage.py rqworker default &
+
+echo "-> Starting server"
+python3 manage.py runserver 0.0.0.0:8000

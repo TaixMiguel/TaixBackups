@@ -1,7 +1,6 @@
-Flask==2.2.2
-Flask-Migrate==4.0.4
-Flask-SQLAlchemy==2.5.1
-Flask-WTF==1.1.1
+django==4.1.6
+django-rq==2.7.0
+dj-database-url==1.2.0
 mega.py==1.0.8
 paho-mqtt==1.6.1
-WTForms~=3.0.1
+redis==4.5.1
