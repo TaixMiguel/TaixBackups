@@ -120,6 +120,7 @@ RQ_QUEUES = {
 # Configuration of log
 level_log = configApp.get_value(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.LEVEL_LOG, 'INFO')
 path_log = configApp.get_value(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.PATH, BASE_DIR)
+n_files_log = configApp.get_value_integer(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.NUMBER_FILES_LOG, 7)
 #if DEBUG:
 #    level_log = 'DEBUG'
 LOGGING = {
@@ -129,14 +130,20 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': level_log,
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(path_log, 'taixBackups.log'),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': n_files_log,
             'formatter': 'app',
         },
         'file_rq': {
             'level': level_log,
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(path_log, 'taixBackups_rq.log'),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': n_files_log,
             'formatter': 'app',
         },
     },

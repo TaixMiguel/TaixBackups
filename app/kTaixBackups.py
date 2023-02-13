@@ -16,6 +16,7 @@ class Config:
 
     class Log:
         ROOT = 'log'
+        NUMBER_FILES_LOG = 'numberOfLogsFile'
         LEVEL_LOG = 'levelLog'
         PATH = 'path'
 
