@@ -46,6 +46,10 @@ Ejemplo de fichero de configuración:
     "debugMode": false,
     "secretKey": "xxx"
   },
+  "bbdd": {
+    "engine": "django.db.backends.sqlite3",
+    "name": "/taixBackup/db.sqlite3"
+  },
   "djangoRQ": {
     "db": 0,
     "host": "localhost",

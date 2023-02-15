@@ -7,6 +7,11 @@ class Config:
         DEBUG_MODE = 'debugMode'
         SECRET_KEY = 'secretKey'
 
+    class BBDD:
+        ROOT = 'bbdd'
+        ENGINE = 'engine'
+        NAME = 'name'
+
     class DjangoRQ:
         ROOT = 'djangoRQ'
         DB = 'db'

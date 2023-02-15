@@ -1,4 +1,3 @@
-import dj_database_url
 import os
 from pathlib import Path
 
@@ -61,11 +60,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:////'+os.path.join(BASE_DIR, 'db.sqlite3'),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': configApp.get_value(kTaixBackups.Config.BBDD.ROOT, kTaixBackups.Config.BBDD.ENGINE, 'django.db.backends.sqlite3'),
+        'NAME': configApp.get_value(kTaixBackups.Config.BBDD.ROOT, kTaixBackups.Config.BBDD.NAME, os.path.join(BASE_DIR, 'db.sqlite3')),
+    }
 }
 
 
