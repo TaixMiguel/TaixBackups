@@ -1,4 +1,3 @@
-import dj_database_url
 import os
 from pathlib import Path
 
@@ -61,11 +60,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:////'+os.path.join(BASE_DIR, 'db.sqlite3'),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': configApp.get_value(kTaixBackups.Config.BBDD.ROOT, kTaixBackups.Config.BBDD.ENGINE, 'django.db.backends.sqlite3'),
+        'NAME': configApp.get_value(kTaixBackups.Config.BBDD.ROOT, kTaixBackups.Config.BBDD.NAME, os.path.join(BASE_DIR, 'db.sqlite3')),
+    }
 }
 
 
@@ -121,8 +119,6 @@ RQ_QUEUES = {
 level_log = configApp.get_value(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.LEVEL_LOG, 'INFO')
 path_log = configApp.get_value(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.PATH, BASE_DIR)
 n_files_log = configApp.get_value_integer(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.NUMBER_FILES_LOG, 7)
-#if DEBUG:
-#    level_log = 'DEBUG'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

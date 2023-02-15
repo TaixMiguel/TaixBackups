@@ -46,7 +46,12 @@ Ejemplo de fichero de configuración:
     "debugMode": false,
     "secretKey": "xxx"
   },
+  "bbdd": {
+    "engine": "django.db.backends.sqlite3",
+    "name": "/taixBackup/db.sqlite3"
+  },
   "djangoRQ": {
+    "dashboard": false,
     "db": 0,
     "host": "localhost",
     "port": 6379,
@@ -65,6 +70,9 @@ Ejemplo de fichero de configuración:
   }
 }
 ```
+
+### RQ Dashboard
+Para visualizar el cuadro RQ, necesitaremos entrar en la url `http://xxxxxxx:8000/django_rq/`
 
 ## Licencia
 [GNU General Public License v3.0](https://github.com/TaixMiguel/TaixBackups/blob/main/LICENSE)
