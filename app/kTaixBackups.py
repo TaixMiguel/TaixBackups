@@ -14,6 +14,7 @@ class Config:
 
     class DjangoRQ:
         ROOT = 'djangoRQ'
+        DASHBOARD = 'dashboard'
         DB = 'db'
         HOST = 'host'
         PORT = 'port'

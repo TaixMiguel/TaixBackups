@@ -119,8 +119,6 @@ RQ_QUEUES = {
 level_log = configApp.get_value(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.LEVEL_LOG, 'INFO')
 path_log = configApp.get_value(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.PATH, BASE_DIR)
 n_files_log = configApp.get_value_integer(kTaixBackups.Config.Log.ROOT, kTaixBackups.Config.Log.NUMBER_FILES_LOG, 7)
-#if DEBUG:
-#    level_log = 'DEBUG'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
