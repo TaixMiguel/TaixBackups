@@ -32,7 +32,7 @@ def execute_backup_task(backup: Backup) -> None:
             logger.debug("Se ejecuta la creación del Backup")
             filename = backup_creator.create_backup()
             status = True
-    except FileNotFoundError as error:
+    except Exception as error:
         logger.info(f"El backup '{backup.name}' no se ha generado por un error")
         # TODO: eliminar el backup generado, si se ha generado
         logger.exception(error)
