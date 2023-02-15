@@ -15,7 +15,6 @@ services:
     ports:
       - 8000:8000
     environment:
-      - 'DATABASE_URL=sqlite:////taixBackups/config/db.sqlite3'
       - 'CONFIG_FILE_TAIXBACKUP=/taixBackup/config/configApp.json'
 
   redis:
@@ -26,17 +25,6 @@ services:
     network_mode: bridge
     ports:
       - 6379:6379
-
-  rq-dashboard:
-    image: eoranged/rq-dashboard
-    restart: always
-    network_mode: bridge
-    ports:
-      - 9181:9181
-    environment:
-      - 'RQ_DASHBOARD_REDIS_URL=redis://127.0.0.1:6379'
-      - 'RQ_DASHBOARD_USERNAME=rq'
-      - 'RQ_DASHBOARD_PASSWORD=password'
 ```
 
 Ejemplo de fichero de configuración:
