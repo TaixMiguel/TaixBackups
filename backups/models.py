@@ -7,6 +7,9 @@ class StorageService(models.Model):
     code = models.CharField(max_length=8, help_text='Código del servicio de almacenamiento')
     name = models.CharField(max_length=50, help_text='Nombre del servicio de almacenamiento')
 
+    def __str__(self):
+        return f'{self.code} - {self.name}'
+
 class Backup(models.Model):
 
     id_backup = models.AutoField(primary_key=True)
@@ -23,8 +26,8 @@ class Backup(models.Model):
                                       help_text='Indica la fecha de alta del backup',
                                       default=django.utils.timezone.now)
 
-    def create_backup(self) -> None:
-        pass
+    def __str__(self):
+        return f'{self.id_storage_service_fK.code} - {self.name}'
 
 class BackupHistory(models.Model):
 
@@ -48,3 +51,7 @@ class BackupHistory(models.Model):
         if self.backup_size > (1024 * 1024):
             return "{:01.0f} MB".format(self.backup_size / (1024 * 1024))
         return "{:01.0f} B".format(self.backup_size)
+
+    def __str__(self):
+        date: str = self.audit_time.strftime("%d/%m/%Y %H:%M:%S")
+        return f'[{self.status}] {self.id_backup_fk} - {date}'
