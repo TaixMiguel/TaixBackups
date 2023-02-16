@@ -11,6 +11,9 @@ from backups.mqtt import mqtt
 
 logger = logging.getLogger(__name__)
 
+def get_code_status(status: bool) -> str:
+    return kTaixBackups.Backup.STATUS_COMPLETE if status else kTaixBackups.Backup.STATUS_ERROR
+
 @job
 def execute_backup_task(backup: Backup) -> None:
     logger.debug(f"Se registra un histórico asociado al Backup '{backup.name}'")
@@ -40,7 +43,7 @@ def execute_backup_task(backup: Backup) -> None:
 
     logger.debug(f"Se actualiza el histórico asociado al Backup '{backup.name}'")
     history.backup_size = backup_creator.size if backup_creator else 0
-    history.status = kTaixBackups.Backup.STATUS_COMPLETE if status else kTaixBackups.Backup.STATUS_ERROR
+    history.status = get_code_status(status)
     history.duration = time_end - time_start
     history.backup_name = filename
     history.save()
@@ -50,16 +53,22 @@ def execute_backup_task(backup: Backup) -> None:
                      f"{backup.n_backups_max}")
         BackupHistory.objects.filter(id_backup_fk=backup)[0].delete()
 
-    if status and ConfigApp().get_value_boolean(kTaixBackups.Config.MQTT.ROOT, kTaixBackups.Config.MQTT.SWITCH_ENABLED):
-        logger.debug(f"Se informa de la generación del backup {backup.name} por MQTT")
+    if ConfigApp().get_value_boolean(kTaixBackups.Config.MQTT.ROOT, kTaixBackups.Config.MQTT.SWITCH_ENABLED) and \
+            (status or backup.sw_sensor_mqtt):
         client_mqtt: mqtt.MQTT = mqtt.MQTT()
-        state_topic: str = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastBackup')
-        client_mqtt.send_message(topic=state_topic, payload=backup.name, retain=True)
+        if status:
+            logger.debug(f"Se informa de la generación del backup {backup.name} por MQTT")
+            state_topic: str = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastBackup')
+            client_mqtt.send_message(topic=state_topic, payload=backup.name, retain=True)
 
-        state_topic: str = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastExecution')
-        client_mqtt.send_message(topic=state_topic, payload=int(time.time()), retain=True)
-        client_mqtt.disconnect()
+            state_topic: str = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastExecution')
+            client_mqtt.send_message(topic=state_topic, payload=int(time.time()), retain=True)
 
         if backup.sw_sensor_mqtt:
-            # TODO: actualizar sensor MQTT concreto si procede
-            pass
+            logger.debug(f"Se informa del estado concreto del backup {backup.name} por MQTT")
+            state_topic: str = mqtt.format_topic(topic_prefix='stat', backup_id=backup.name, topic_subfix='stateBackup')
+            client_mqtt.send_message(topic=state_topic, payload=get_code_status(status), retain=True)
+
+            state_topic: str = mqtt.format_topic(topic_prefix='stat', backup_id=backup.name, topic_subfix='lastExecution')
+            client_mqtt.send_message(topic=state_topic, payload=int(time.time()), retain=True)
+        client_mqtt.disconnect()
