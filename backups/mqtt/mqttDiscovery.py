@@ -17,8 +17,13 @@ class MQTTDevice:
         self.__model = model
         self.__name = name
 
-    def add_identifier(self, identifier: str):
+    def add_identifier(self, identifier: str) -> None:
         self.__identifiers.append(identifier)
+
+    def get_first_identifier(self) -> str:
+        if self.__identifiers:
+            return self.__identifiers[0]
+        return ''
 
     def format_json(self) -> dict:
         json_device = {}
@@ -33,6 +38,7 @@ class MQTTDevice:
 class MQTTEntity:
     __mqttDevice: MQTTDevice
     unitOfMeasurement: str = ''
+    component: str = 'sensor'
     __commandTopic: str
     __stateTopic: str
     __objectId: str
@@ -62,6 +68,14 @@ class MQTTEntity:
         add_param_if_not_empty(json_entity, 'unit_of_measurement', self.unitOfMeasurement)
         json_entity['device'] = self.__mqttDevice.format_json()
         return json.dumps(json_entity)
+
+    def get_config_topic(self, discovery_prefix: str='homeassistant') -> str:
+        first_identifier: str = self.__mqttDevice.get_first_identifier()
+        topic: str = discovery_prefix + '/' + self.component + '/'
+        if first_identifier:
+            topic += first_identifier + '/'
+        topic += self.__objectId + '/config'
+        return topic
 
 
 def create_sensor(mqtt_device: MQTTDevice, name: str, state_topic: str, object_id: str = "",

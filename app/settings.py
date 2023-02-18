@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'backups.apps.BackupsConfig',
+    'daemon.apps.DaemonConfig',
     'django_rq',
 ]
 
