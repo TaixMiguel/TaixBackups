@@ -61,13 +61,13 @@ class DaemonWatcher:
             logger.debug('Creación del sensor global última ejecución')
             state_topic = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastExecution')
             entity = create_sensor(mqtt_device=mqtt_device, name='Última ejecución', state_topic=state_topic,
-                                   object_id='lastExecution', retain=True)
+                                   object_id='taixBackups_global_lastExecution', retain=True)
             send_mqtt_home_assistant_entity(client_mqtt=client_mqtt, entity=entity)
 
             logger.debug('Creación del sensor global último backup')
             state_topic = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastBackup')
             entity = create_sensor(mqtt_device=mqtt_device, name='Último backup', state_topic=state_topic, retain=True,
-                                   object_id='lastBackup')
+                                   object_id='taixBackups_global_lastBackup')
             send_mqtt_home_assistant_entity(client_mqtt=client_mqtt, entity=entity)
 
             backups = Backup.objects.filter(sw_sensor_mqtt=True)
@@ -77,13 +77,14 @@ class DaemonWatcher:
                 state_topic = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastExecution',
                                                 backup_id=backup.name)
                 entity = create_sensor(mqtt_device=mqtt_device, name=f'Ejecución [{backup.name}]',
-                                       state_topic=state_topic, object_id=backup.name + '_lastExecution', retain=True)
+                                       state_topic=state_topic, object_id=f'taixBackups_{backup.name}_lastExecution',
+                                       retain=True)
                 send_mqtt_home_assistant_entity(client_mqtt=client_mqtt, entity=entity)
 
                 logger.debug(f'Creación del sensor de estado para el backup {backup}')
                 state_topic = mqtt.format_topic(topic_prefix='stat', topic_subfix='stateBackup', backup_id=backup.name)
                 entity = create_sensor(mqtt_device=mqtt_device, name=f'Estado [{backup.name}]', state_topic=state_topic,
-                                       object_id=backup.name + '_stateBackup', retain=True)
+                                       object_id=f'taixBackups_{backup.name}_stateBackup', retain=True)
                 send_mqtt_home_assistant_entity(client_mqtt=client_mqtt, entity=entity)
             client_mqtt.disconnect()
             self.warehouse['last_execution_mqtt'] = datetime.datetime.now()
