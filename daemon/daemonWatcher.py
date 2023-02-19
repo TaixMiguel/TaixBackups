@@ -27,8 +27,9 @@ class DaemonWatcher:
         self.timeSleep = 1 * 60 * 60  # Cada hora (se mide en segundos)
 
     def run(self) -> None:
-        thread = threading.Thread(target=self.__turn_on, name='DaemonWatcher')
-        thread.start()
+        # thread = threading.Thread(target=self.__turn_on, name='DaemonWatcher')
+        # thread.start()
+        self.create_mqtt_entities()
 
     def __turn_on(self) -> None:
         logger.debug('Inicio de DaemonWatcher')
