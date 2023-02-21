@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('newBackup', views.create_new_backup, name='create-new-backup'),
     path('execBackup/<int:id_backup>', views.exec_backup, name='execute-backup'),
 ]
 

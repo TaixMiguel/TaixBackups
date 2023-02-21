@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'backups.apps.BackupsConfig',
     'daemon.apps.DaemonConfig',
     'django_rq',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
