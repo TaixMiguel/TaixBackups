@@ -1,3 +1,5 @@
+import logging
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -5,6 +7,8 @@ from app import kTaixBackups
 from backups.forms import CreateBackupForm
 from backups.models import Backup
 from backups.task import execute_backup_task
+
+logger = logging.getLogger(__name__)
 
 def create_context(custom: dict=None) -> dict:
     context = {'app_name':kTaixBackups.APP_NAME, 'app_version':kTaixBackups.APP_VERSION}
@@ -44,3 +48,10 @@ def exec_backup(request, id_backup: int):
 
         return render(request, 'execute_backup.html', context=create_context({'backup': backup}))
     return None
+
+def delete_backup(request, id_backup: int):
+    backups: Backup = Backup.objects.filter(id_backup=id_backup)
+    if backups:
+        logger.info(f'Se ha pedido la eliminación del backup {backups[0]}')
+        Backup.objects.filter(id_backup=id_backup).delete()
+    return HttpResponseRedirect('/')

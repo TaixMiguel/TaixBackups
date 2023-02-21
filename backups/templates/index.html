@@ -13,8 +13,11 @@
     </h2>
   </div>
 
-  <div id="targetBackup{{backup.id_backup}}" class="w3-container w3-card-4 w3-white w3-hide">
+  <div id="targetBackup{{backup.id_backup}}" class="w3-container w3-card-4 w3-white w3-hide" style="position: relative;">
     <p>
+      <div class="w3-display-topright w3-margin">
+        <a href="/deleteBackup/{{backup.id_backup}}"><i class="w3-xlarge fa fa-trash"></i></a>
+      </div>
       {% with backup.backuphistory_set.all.last as history %}
         {% if history %}
       <div class="w3-row">
