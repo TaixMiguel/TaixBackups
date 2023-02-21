@@ -3,7 +3,7 @@
 
 {% block content %}
   <div class="w3-container w3-gray">
-    <h2>Nuevo backup</h2>
+    <h2>{{ sw_create|yesno:"Nuevo backup,Actualizar backup" }}</h2>
   </div>
 
   <form class="w3-container w3-card-4 w3-white" action="" method="post" novalidate>
@@ -90,6 +90,6 @@
       </div>
     </div>
 
-    <input class="w3-button w3-block w3-section w3-dark-grey w3-ripple w3-padding" type="submit" value="Crear backup" />
+    <input class="w3-button w3-block w3-section w3-dark-grey w3-ripple w3-padding" type="submit" value="{{ sw_create|yesno:"Crear backup,Actualizar backup" }}" />
   </form>
 {% endblock %}
