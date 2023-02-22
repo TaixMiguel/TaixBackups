@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 import datetime
 import logging
-import threading
 import time
 
 from app import kTaixBackups
 from app.configApp import ConfigApp
 from backups.models import Backup
 from backups.mqtt import mqtt
-from backups.mqtt.mqttDiscovery import create_sensor, MQTTEntity, MQTTDevice
+from backups.mqtt.mqttDiscovery import create_sensor, MQTTEntity, MQTTDevice, create_device, MQTTTool
 
 logger = logging.getLogger(__name__)
 
@@ -53,12 +52,10 @@ class DaemonWatcher:
 
             client_mqtt: mqtt.MQTT = mqtt.MQTT()
             logger.debug('Creación del dispositivo MQTT')
-            mqtt_device: MQTTDevice = MQTTDevice(manufacturer='TaixMiguel', name=kTaixBackups.APP_NAME,
-                                                 model='TaixBackups', version=kTaixBackups.APP_VERSION)
-            mqtt_device.add_identifier('taixBackup')
 
             state_topic: str = None
             entity: MQTTEntity = None
+            mqtt_device: MQTTDevice = create_device()
             logger.debug('Creación del sensor global última ejecución')
             state_topic = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastExecution')
             entity = create_sensor(mqtt_device=mqtt_device, name='Última ejecución', state_topic=state_topic,
@@ -73,19 +70,13 @@ class DaemonWatcher:
 
             backups = Backup.objects.filter(sw_sensor_mqtt=True)
             for aux_backup in backups:
-                backup: Backup = aux_backup
-                logger.debug(f'Creación del sensor de última ejecución para el backup {backup}')
-                state_topic = mqtt.format_topic(topic_prefix='stat', topic_subfix='lastExecution',
-                                                backup_id=backup.name)
-                entity = create_sensor(mqtt_device=mqtt_device, name=f'Ejecución [{backup.name}]',
-                                       state_topic=state_topic, object_id=f'taixBackups_{backup.name}_lastExecution',
-                                       retain=True)
+                mqtt_tool: MQTTTool = MQTTTool(mqtt_device, aux_backup.name)
+                logger.debug(f'Creación del sensor de última ejecución para el backup {aux_backup}')
+                entity = mqtt_tool.create_sensor_last_execution()
                 send_mqtt_home_assistant_entity(client_mqtt=client_mqtt, entity=entity)
 
-                logger.debug(f'Creación del sensor de estado para el backup {backup}')
-                state_topic = mqtt.format_topic(topic_prefix='stat', topic_subfix='stateBackup', backup_id=backup.name)
-                entity = create_sensor(mqtt_device=mqtt_device, name=f'Estado [{backup.name}]', state_topic=state_topic,
-                                       object_id=f'taixBackups_{backup.name}_stateBackup', retain=True)
+                logger.debug(f'Creación del sensor de estado para el backup {aux_backup}')
+                entity = mqtt_tool.create_sensor_state_backup()
                 send_mqtt_home_assistant_entity(client_mqtt=client_mqtt, entity=entity)
             client_mqtt.disconnect()
             self.warehouse['last_execution_mqtt'] = datetime.datetime.now()

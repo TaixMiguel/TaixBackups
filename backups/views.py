@@ -6,7 +6,7 @@ from django.shortcuts import render
 from app import kTaixBackups
 from backups.forms import CreateBackupForm
 from backups.models import Backup
-from backups.task import execute_backup_task
+from backups.task import execute_backup_task, update_mqtt_sensors_task
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +67,7 @@ def update_backup(request, id_backup: int):
                 backup.n_backups_max = form.cleaned_data['num_backups']
                 backup.sw_sensor_mqtt = form.cleaned_data['sensor_mqtt']
                 backup.save()
+                update_mqtt_sensors_task.delay(backup, backup.sw_sensor_mqtt)
                 return HttpResponseRedirect('/')
         else:
             initial = {
@@ -90,4 +91,5 @@ def delete_backup(request, id_backup: int):
     if backups:
         logger.info(f'Se ha pedido la eliminación del backup {backups[0]}')
         Backup.objects.filter(id_backup=id_backup).delete()
+        update_mqtt_sensors_task.delay(backups[0], False)
     return HttpResponseRedirect('/')

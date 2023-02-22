@@ -8,6 +8,7 @@ from app.configApp import ConfigApp
 from backups.creator import toolBackupCreator
 from backups.models import Backup, BackupHistory
 from backups.mqtt import mqtt
+from backups.mqtt.mqttDiscovery import create_device, MQTTDevice, MQTTTool
 
 logger = logging.getLogger(__name__)
 
@@ -71,4 +72,19 @@ def execute_backup_task(backup: Backup) -> None:
 
             state_topic: str = mqtt.format_topic(topic_prefix='stat', backup_id=backup.name, topic_subfix='lastExecution')
             client_mqtt.send_message(topic=state_topic, payload=int(time.time()), retain=True)
+        client_mqtt.disconnect()
+
+@job
+def update_mqtt_sensors_task(backup: Backup, create_sensor: bool) -> None:
+    if ConfigApp().get_value_boolean(kTaixBackups.Config.MQTT.ROOT, kTaixBackups.Config.MQTT.SWITCH_ENABLED):
+        client_mqtt: mqtt.MQTT = mqtt.MQTT()
+        mqtt_device: MQTTDevice = create_device()
+        mqtt_tool: MQTTTool = MQTTTool(mqtt_device, backup.name)
+        logger.debug(f'Actualización del sensor de última ejecución para el backup {backup}')
+        entity = mqtt_tool.create_sensor_last_execution()
+        client_mqtt.send_message(topic=entity.get_config_topic(), payload=entity.format_json() if create_sensor else '', retain=True)
+
+        logger.debug(f'Actualización del sensor de estado para el backup {backup}')
+        entity = mqtt_tool.create_sensor_state_backup()
+        client_mqtt.send_message(topic=entity.get_config_topic(), payload=entity.format_json() if create_sensor else '', retain=True)
         client_mqtt.disconnect()

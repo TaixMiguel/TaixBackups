@@ -2,6 +2,8 @@
 
 import json
 
+from app import kTaixBackups
+
 
 def add_param_if_not_empty(json_data: str, key: str, data):
     if data:
@@ -78,6 +80,33 @@ class MQTTEntity:
         return topic
 
 
+class MQTTTool:
+
+    __backup_name: str
+    __mqtt_device: MQTTDevice
+
+    def __init__(self, mqtt_device: MQTTDevice, backup_name: str):
+        self.__backup_name = backup_name
+        self.__mqtt_device = mqtt_device
+
+    def create_sensor_last_execution(self) -> MQTTEntity:
+        state_topic = f'stat{kTaixBackups.MQTT.TOPIC}{self.__backup_name}/lastExecution'
+        return create_sensor(mqtt_device=self.__mqtt_device, name=f'Ejecución [{self.__backup_name}]', retain=True,
+                             state_topic=state_topic, object_id=f'taixBackups_{self.__backup_name}_lastExecution')
+
+    def create_sensor_state_backup(self) -> MQTTEntity:
+        state_topic = f'stat{kTaixBackups.MQTT.TOPIC}{self.__backup_name}/stateBackup'
+        return create_sensor(mqtt_device=self.__mqtt_device, name=f'Estado [{self.__backup_name}]', retain=True,
+                             state_topic=state_topic, object_id=f'taixBackups_{self.__backup_name}_stateBackup')
+
+
 def create_sensor(mqtt_device: MQTTDevice, name: str, state_topic: str, object_id: str = "",
                   retain: bool = False) -> MQTTEntity:
     return MQTTEntity(mqtt_device=mqtt_device, name=name, state_topic=state_topic, object_id=object_id, retain=retain)
+
+def create_device() -> MQTTDevice:
+    from app import kTaixBackups
+    mqtt_device: MQTTDevice = MQTTDevice(manufacturer='TaixMiguel', name=kTaixBackups.APP_NAME, model='TaixBackups',
+                                         version=kTaixBackups.APP_VERSION)
+    mqtt_device.add_identifier('taixBackup')
+    return mqtt_device
