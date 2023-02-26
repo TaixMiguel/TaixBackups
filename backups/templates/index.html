@@ -1,0 +1,90 @@
+{% extends "base_generic.html" %}
+{% block title %}Backups{% endblock %}
+
+{% block content %}
+  {% if backup_list %}
+    {% for backup in backup_list %}
+  <div class="w3-panel w3-display-container w3-gray" style="margin-bottom: 0px;">
+    <span onclick="location.href = '/execBackup/{{backup.id_backup}}';" class="w3-button w3-display-right">
+      <i class="fa fa-play w3-right w3-xxxlarge" title="Lanzar backup"></i>
+    </span>
+    <h2 style="cursor: pointer;" onClick="$('#targetBackup{{backup.id_backup}}').toggleClass('w3-hide');">
+      {{backup.name}}
+    </h2>
+  </div>
+
+  <div id="targetBackup{{backup.id_backup}}" class="w3-container w3-card-4 w3-white w3-hide" style="position: relative;">
+    <p>
+      <div class="w3-display-topright w3-margin">
+        <a href="/updateBackup/{{backup.id_backup}}"><i class="w3-xlarge fa fa-pencil-square-o w3-hover-text-orange"></i></a>
+        <a href="/deleteBackup/{{backup.id_backup}}"><i class="w3-xlarge fa fa-trash w3-hover-text-red"></i></a>
+      </div>
+      {% with backup.backuphistory_set.all.last as history %}
+        {% if history %}
+      <div class="w3-row">
+        <div class="w3-container w3-quarter w3-right-align">
+          <strong>Última ejecución</strong>
+        </div>
+        <div class="w3-container w3-quarter">
+         {{history.audit_time|date:"d/m/Y"}} {{history.audit_time|time:"H:i:s"}}
+        </div>
+        <div class="w3-container w3-quarter w3-right-align">
+          <strong>Duración</strong>
+        </div>
+        <div class="w3-container w3-quarter">
+          {{history.format_duration}}
+        </div>
+      </div>
+        {% endif %}
+      {% endwith %}
+      <div class="w3-row">
+        <div class="w3-container w3-quarter w3-right-align">
+          <strong>Nº de backups máx.</strong>
+        </div>
+        <div class="w3-container w3-quarter">
+          {{backup.n_backups_max}}
+        </div>
+        <div class="w3-container w3-quarter w3-right-align">
+          <strong>Sensor MQTT propio</strong>
+        </div>
+        <div class="w3-container w3-quarter">
+          {{ backup.sw_sensor_mqtt|yesno:"Sí,No" }}
+        </div>
+      </div>
+      <div class="w3-container w3-large">{{backup.description}}</div>
+    </p>
+
+    {% if backup.backuphistory_set.count > 0 %}
+    <button onClick="$('#historicoBackup{{backup.id_backup}}').toggleClass('w3-show')" class="w3-btn w3-block w3-gray w3-left-align">
+      Consultar todas las ejecuciones
+    </button>
+    <div id="historicoBackup{{backup.id_backup}}" class="w3-hide">
+      <table class="w3-table-all w3-striped w3-border">
+        <tr>
+          <th></th>
+          <th class="w3-center">Fecha</th>
+          <th class="w3-center">Duración</th>
+          <th class="w3-center">Nombre del fichero</th>
+          <th class="w3-center">Tamaño del backup</th>
+          <th class="w3-center">Estado</th>
+        </tr>
+        {% for history in backup.backuphistory_set.all %}
+        <tr>
+          <td class="w3-left">{{forloop.counter}}.</td>
+          <td class="w3-center">{{history.audit_time|date:"d/m/Y"}} {{history.audit_time|time:"H:i:s"}}</td>
+          <td class="w3-center">{{history.format_duration}}</td>
+          <td class="w3-center">{{history.backup_name}}</td>
+          <td class="w3-center">{{history.format_size}}</td>
+          <td class="w3-center">{{history.status}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <br />
+    {% endif %}
+  </div>
+    {% endfor %}
+  {% else %}
+  <p>No se han definido backups</p>
+  {% endif %}
+{% endblock %}

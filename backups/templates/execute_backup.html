@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+{% block title %}Ejecución de backup{% endblock %}
+
+{% block content %}
+  <p>Se ha lanzado un nuevo backup asociado a {{backup.name}}</p>
+  <p>Se redirigirá automáticamente al inicio en <span id="timeToDie">10</span> segundos.</p>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+  //<!--
+    function redirectToIndex() {
+      let index = parseInt($('#timeToDie').text()) - 1;
+      if (index > 0)  $('#timeToDie').text(index);
+      else window.location.href = "/";
+    }
+    setInterval(redirectToIndex, 1000);
+  //-->
+</script>
+{% endblock %}
