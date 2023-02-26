@@ -1,5 +1,5 @@
 APP_NAME = 'Generador de Backups'
-APP_VERSION = '0.1.0_alpha'
+APP_VERSION = "0.1.1_alpha" # Mantener doble comillas para el CI
 
 class Config:
     class Application:
