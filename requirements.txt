@@ -3,4 +3,4 @@ django-rq==2.7.0
 django-widget-tweaks==1.4.12
 mega.py==1.0.8
 paho-mqtt==1.6.1
-redis==4.5.4
+redis==4.5.5
