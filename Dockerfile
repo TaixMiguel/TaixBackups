@@ -1,16 +1,18 @@
 FROM ubuntu:latest
 
 WORKDIR /taixBackup
+EXPOSE 8000/tcp
 
-RUN apt-get update
-RUN apt-get install -y python3 python3-pip tini
-RUN pip3 install tzdata --upgrade
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip tini && \
+    pip3 install tzdata --upgrade
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+RUN rm -r requirements.txt
 
 COPY . .
-RUN pip3 install -r requirements.txt
 RUN chmod -R 777 /taixBackup/entrypoint.sh
-RUN rm -r .github .gitignore Dockerfile LICENSE README.md requirements.txt
 
-EXPOSE 8000/tcp
 ENTRYPOINT [ "tini", "--" ]
 CMD /taixBackup/entrypoint.sh
