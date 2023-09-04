@@ -1,4 +1,4 @@
-django==4.2.4
+django==4.2.5
 django-rq==2.8.1
 django-widget-tweaks==1.5.0
 mega.py==1.0.8
