@@ -7,7 +7,7 @@ jobs:
     name: Creación del tag y release asociados a la versión
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Establecer variables
         run: |
           APP_VERSION=$(awk '/APP_VERSION/{print $3}' app/kTaixBackups.py)
@@ -35,7 +35,7 @@ jobs:
     name: Creación de la imagen Docker
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Establecer variables
         run: |
           APP_VERSION=$(awk '/APP_VERSION/{print $3}' app/kTaixBackups.py)
