@@ -42,7 +42,7 @@ jobs:
           APP_VERSION=$(awk '/APP_VERSION/{print $3}' app/kTaixBackups.py)
           APP_VERSION=${APP_VERSION//\"/}
           echo "VERSION_SOURCE=$APP_VERSION" >> $GITHUB_ENV
-      - uses: mukunku/tag-exists-action@v1.3.0
+      - uses: mukunku/tag-exists-action@v1.4.0
         id: checkTag
         with:
           tag: ${{ env.VERSION_SOURCE }}
